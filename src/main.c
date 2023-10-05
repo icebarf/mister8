@@ -25,6 +25,14 @@
 }
 // clang-format on
 
+static inline uint16_t
+fetch(memory_t* memory, uint16_t* pc)
+{
+  uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[(*pc) + 1]);
+  pc += 2;
+  return inst;
+}
+
 int
 main(int argc, char** argv)
 {
