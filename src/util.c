@@ -20,7 +20,7 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
   FILE* rom = fopen(fname, "rb");
   if (rom == NULL) {
     perror(fname);
-    return 1;
+    return -1;
   }
 
   /* assume the fseek() doesn't fail */
@@ -30,10 +30,10 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
   switch (fsize) {
     case -1:
       perror(fname);
-      return 1;
+      return -1;
     case 0:
       fprintf(stderr, "mister8: rom file size too small\n");
-      return 1;
+      return -1;
       break;
     default:
       break;
@@ -41,17 +41,19 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
 
   if (!memory_available_for(TO_ULONG(fsize))) {
     fprintf(stderr, "mister8: rom file too large to store\n");
-    return 1;
+    return -1;
   }
 
-  if (fread(
-        &(*dest_memory)[PROG_LOAD_ADDRESS], CHAR_BIT, TO_ULONG(fsize), rom) !=
-      TO_ULONG(fsize)) {
+  size_t read_bytes =
+    fread(&(*dest_memory)[PROG_LOAD_ADDRESS], 1, TO_ULONG(fsize), rom);
+  if (read_bytes != TO_ULONG(fsize)) {
     perror(fname);
-    return 1;
+    return -1;
   }
 
   fclose(rom);
 
-  return 0;
+  /* we know that the read_bytes value is none larger than 0xe000 bytes, or
+   * 3584 bytes and is non-negative */
+  return (int)read_bytes;
 }

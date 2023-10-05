@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "chip8.h"
 #include "util.h"
 
@@ -26,5 +28,15 @@
 int
 main(int argc, char** argv)
 {
+  if (argc != 2) {
+    fprintf(stdout, "./mister8 romfile\n");
+    return 0;
+  }
+
   struct system chip8 = { .memory = font, { 0 } };
+
+  int read_bytes = read_file(argv[1], &chip8.memory);
+  if (read_bytes <= 0)
+    return 1;
+  fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
 }

@@ -5,7 +5,7 @@
 #include "chip8.h"
 
 /* we want the type information to be retained for the memory parameter */
-typedef uint8_t(memory_t)[DISPLAY_W * DISPLAY_H];
+typedef uint8_t(memory_t)[MEMORY_CAP];
 
 int
 read_file(const char fname[static 1], memory_t dest_memory[static 1]);
