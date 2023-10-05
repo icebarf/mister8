@@ -1,28 +1,72 @@
-Icebarf's License v1.0.1
+Icebarf's License v2.0.0
 
 Copyright (c) 2023 Amritpal Singh, All Rights Reserved.
 
-1. The software comes with ABSOLUTELY NO WARRANTY WHATSOEVER.
-2. The user of this code in any form, must not be anti-human.
-3. You have been granted the following permissions for the code - use, study, copy, 
-   share the undisturbed work, make modifications, redistribute modified works
-   (even under a different name), and compile it.
-4. All original copyright information must be retained, including the license.
-   The copyright information must be shipped with the source code, and the 
-   compiled program as well. The information could be in the form of this 
-   license or any other form, with addendums to the Copyright information 
-   header if any modifications are made.
-5. All rights are reserved by the copyright holder(s).
-6. If there is any confusion regarding the LICENSE terms, one must contact the 
-   original author of the code via any means of communication to discuss them
-   and reach a resolution. This should be done before making any modifications
-   or redistributing.
-7. Decisions made in (6) are applicable to all similar situations once decided.
-8. Teaching children is a duty which if abdicated will kill all of
-   our families. This code is produced in conformance with that duty
-   and the only warrant is that of God.
-9. Selling code is unethical and this code may not be used for 
-   this unethical purpose.
+Contact information: 
+E-mail: sysgrammer@protonmail.com
+
+TERMS:
+1.  The software comes with ABSOLUTELY NO WARRANTY WHATSOEVER.
+2.  All rights are reserved by the copyright holder(s).
+3.  The user of this code in any form, must not be anti-human.
+4.  You have been granted the following permissions concerning the WORK:
+    (a) use
+    (b) study
+    (c) copy
+    (d) make modifications
+    (e) redistribute or share, the unmodified or modified work
+        even under a different name.
+    (f) compile
+4a. WORK is defined as code, documentation, or anything that the LICENSE
+    is shipped with. Unless any specific WORK stipulates it is to be treated
+    under different terms, the appropriate TERMS shall apply to the WORK.
+5.  This LICENSE must be preserved.
+    You are not granted the permission to change, modify, swap, or do anything
+    that disturbs the LICENSE.
+6.  All original copyright information must be retained.
+    The copyright information must be shipped with the source code, and the 
+    compiled program as well. The information could be in the form of this 
+    license or any other form, with addendums to the Copyright information 
+    header if any modifications are made.
+7.  If there is any confusion regarding the LICENSE terms, one must contact the
+    copyright holder(s) via any provided means of communication to discuss them
+    and reach a resolution or decision. This should be done before making any 
+    modifications or redistributing.
+7a. If there are more than one copyright holders, then for a decision to be valid
+    there must be a clear majority in support of the decision.
+7b. If no majority is formed in support, then the decision is invalid.
+7c. Decisions made in (7) are applicable to all similar situations once 7(a) and
+    7(b) are upheld.
+7d. All above subsections of 7, and section 7, do not distinguish between
+    code and documentation copyright holders as a separate entities. However,
+    decisions concerning code cannot only have documentation copyright 
+    holders as the majority formers. The vice-versa is not true.
+7e. The decision must be made within a reasonable period of time, 
+    that is "three months".
+    In case all original copyright holders are dead, inactive, or do not care,
+    this LICENSE stipulates that the work be treated immediately as PUBLIC DOMAIN.
+8.  Teaching children is a duty which if abdicated will kill all of
+    our families. This code is produced in conformance with that duty
+    and the only warrant is that of God.
+9.  Selling code is unethical and this code may not be used 
+    for this unethical purpose.
+10. The copyright holder(s) must provide a method of communication
+    in the 'Contact information' section, or anywhere else, but not
+    between the text of these TERMS.
+11. For a contributor to be recognised as a copyright holder, any one of the
+    following conditions must hold true:
+    (a) They must have contributed atleast 3 lines of new code.
+    (b) Modified atleast 5 lines of existing code.
+    (c) They must have contributed atleast 2 lines of new documentation.
+    (d) Modified atleast 4 lines of existing documentation.
+11a. Code comments are documentation.
+11b. There must be a separate copyright header for documentation-only copyright
+     holders. Contributors who have contributed both, code and documentation,
+     or have contributed code are to be put in the existing Copyright header.
+11c. Exemplary documentation copyright header:
+     Copyright (c) DOCUMENTATION, 2023 John Doe.
+11d. 11c does not grant a "John Doe" any copyright and is only an example.
+
 
 Philosophy:
 A good man needs no contract.
