@@ -9,8 +9,10 @@ enum Constants
   DISPLAY_W = 64,
   DISPLAY_H = 32,
   STACK_SIZE = 48,
+  STACK_COUNTER_MAX = 47,
   REGISTER_COUNT = 16,
-  MEMORY_RESERVED = 0x200,
+  BYTES_RESERVED_LOW = 512,
+  BYTES_RESERVED_HIGH = 352,
   PROG_LOAD_ADDRESS = 0x200,
 };
 
@@ -25,6 +27,7 @@ struct __attribute__((packed)) system
   uint16_t program_counter;
   uint8_t delay_timer;
   uint8_t sound_timer;
+  uint8_t stack_counter;
 };
 #endif
 
