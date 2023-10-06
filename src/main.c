@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "chip8.h"
+#include "instructions.h"
 #include "util.h"
 
 // clang-format off
@@ -25,12 +26,18 @@
 }
 // clang-format on
 
-static inline uint16_t
+inline uint16_t
 fetch(memory_t* memory, uint16_t* pc)
 {
   uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[(*pc) + 1]);
   pc += 2;
   return inst;
+}
+
+void
+decode(uint16_t instruction)
+{
+  (void)instruction;
 }
 
 int
