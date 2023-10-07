@@ -35,9 +35,56 @@ fetch(memory_t* memory, uint16_t* pc)
 }
 
 void
-decode(uint16_t instruction)
+decode(struct system* chip8, uint16_t instruction)
 {
-  (void)instruction;
+  switch (nibble(4, instruction)) {
+    case 0x0:
+      switch ($low_byte(instruction)) {
+        case 0xe0:
+          opcode_00e0(&chip8->display);
+          break;
+
+        case 0xee:
+          opcode_00ee(
+            &chip8->program_counter, &chip8->stack, &chip8->stack_counter);
+          break;
+      }
+      break;
+
+    case 0x1:
+      opcode_1nnn(&chip8->program_counter, $high_nib_low_byte(instruction));
+      break;
+
+    case 0x2:
+      opcode_2nnn(&chip8->program_counter,
+                  &chip8->stack,
+                  &chip8->stack_counter,
+                  $high_nib_low_byte(instruction));
+      break;
+
+    case 0x6:
+      opcode_6xnn(
+        &chip8->registers, nibble(3, instruction), $low_byte(instruction));
+      break;
+
+    case 0x7:
+      opcode_7xnn(
+        &chip8->registers, nibble(3, instruction), $low_byte(instruction));
+      break;
+
+    case 0xa:
+      opcode_annn(&chip8->index_register, $high_nib_low_byte(instruction));
+
+    case 0xd:
+      opcode_dxyn(&chip8->memory,
+                  &chip8->display,
+                  &chip8->registers,
+                  chip8->index_register,
+                  nibble(3, instruction),
+                  nibble(2, instruction),
+                  nibble(1, instruction));
+      break;
+  }
 }
 
 int
