@@ -1,3 +1,3 @@
-Intended to be a clean, efficient chip8 interpreter.
+Yet another chip-8 interpreter, intended to be written cleanly.
 
 Mostly an exercise.
