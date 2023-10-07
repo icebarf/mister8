@@ -17,7 +17,7 @@ enum Constants
 };
 
 #ifndef MISTER8_DONT_WANT_SYSTEM
-struct __attribute__((packed)) system
+struct system
 {
   uint8_t display[DISPLAY_W * DISPLAY_H];
   uint8_t memory[MEMORY_CAP];
