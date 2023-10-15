@@ -30,7 +30,7 @@
 inline uint16_t
 fetch(memory_t* memory, uint16_t* pc)
 {
-  uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[(*pc) + 1]);
+  uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[*pc + 1]);
   *pc += 2;
   return inst;
 }
@@ -87,7 +87,11 @@ decode(struct system* chip8, uint16_t instruction)
                   nibble(1, instruction));
       break;
     default:
-      fprintf(stderr, "Unrecognised instruction: 0x%4x\n", instruction);
+      fprintf(stderr,
+              "Unrecognised instruction: 0x%4x\nProgram Counter for "
+              "Instruction: 0x%4x\n",
+              instruction,
+              chip8->program_counter - 2);
       exit(1);
   }
 }
@@ -100,7 +104,17 @@ main(int argc, char** argv)
     return 0;
   }
 
-  struct system chip8 = { .memory = font, { 0 } };
+  struct system chip8 = {
+    .display = { 0 },
+    .memory = font,
+    .stack = { 0 },
+    .registers = { 0 },
+    .index_register = 0,
+    .program_counter = PROG_LOAD_ADDRESS,
+    .delay_timer = 0,
+    .sound_timer = 0,
+    .stack_counter = 0,
+  };
 
   int read_bytes = read_file(argv[1], &chip8.memory);
   if (read_bytes <= 0)
@@ -108,7 +122,6 @@ main(int argc, char** argv)
   fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
   dump_memory(read_bytes, &chip8.memory);
 
-  chip8.program_counter = PROG_LOAD_ADDRESS;
   while (1) {
     uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
     decode(&chip8, instruction);

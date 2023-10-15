@@ -119,16 +119,20 @@ opcode_8xy3(uint8_t* vx, uint8_t vy)
 static inline void
 opcode_8xy4(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = vy > (UINT8_MAX - *vx);
+  *vf = vy > (UINT8_MAX - *vx); // sum of individual components should not be
+                                // larger than the MAX value supported. Thus,
+                                // one individual component being larger than
+                                // MAX - other component, implies to us that
+                                // there will be a carry or an overflow.
   *vx += vy;
 }
 
-/* sub vy from vx, set vf if borrow does not occur */
+/* vx = vx - vy , set vf if borrow does not occur */
 static inline void
 opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
   *vf = 1;
-  if (*vx < vy)
+  if (*vx < vy) // simple elementary school math
     *vf = 0;
 
   *vx -= vy;
