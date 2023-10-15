@@ -2,8 +2,10 @@
 #define MISTER8_INSTRUCTIONS_H
 
 #include "chip8.h"
+#include "input.h"
 #include "util.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -213,4 +215,38 @@ opcode_dxyn(memory_t* mem,
     }
   }
 }
+
+/* skip instruction if hex value of key in vx is pressed (down) */
+static inline void
+opcode_ex9e(uint16_t* pc, uint8_t key, bool (*key_pressed)(int))
+{
+  if (key_pressed(key))
+    *pc += 2;
+}
+
+/* skip instruction if hex value of key in vx is not pressed (up) */
+static inline void
+opcode_exa1(uint16_t* pc, uint8_t key, bool (*key_pressed)(int))
+{
+  if (!key_pressed(key))
+    *pc += 2;
+}
+
+/* store delay timer in vx */
+static inline void
+opcode_fx07(uint8_t delay_timer, uint8_t* vx)
+{
+  *vx = delay_timer;
+}
+
+/* wait for key press and store the result in vx */
+static inline void
+opcode_fx0a(uint16_t* pc, uint8_t* vx)
+{
+  *pc -= 2;
+  *vx = get_key_pressed();
+  if (is_key_released(*vx) && *vx != INVALID_KEY)
+    *pc += 2;
+}
+
 #endif
