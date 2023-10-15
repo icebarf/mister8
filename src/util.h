@@ -42,7 +42,7 @@ nibble(uint8_t pos, uint16_t number);
 /* 0xABCD
  * high byte's first nibble and low byte combined
  */
-#define $high_nib_low_byte(X) (((uint8_t)X & 0x0fff))
+#define $high_nib_low_byte(X) (((uint16_t)X & 0x0fff))
 
 /* stack utils */
 #define $pop(stack_p, stack_cntr_p) (*stack)[(*stack_cntr_p)--]
