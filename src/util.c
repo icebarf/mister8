@@ -62,16 +62,18 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
 void
 dump_display(display_t display[static 1])
 {
-  fprintf(stdout,
-          "----------------------------------------------------------------\n");
+  fprintf(
+    stdout,
+    "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
   for (int y = 0; y < 32; y++) {
     for (int x = 0; x < 64; x++) {
-      fprintf(stdout, "%i", (*display)[x + y * DISPLAY_W]);
+      fprintf(stdout, "%c", (*display)[x + y * DISPLAY_W] == 1 ? '0' : '-');
     }
     fprintf(stdout, "\n");
   }
-  fprintf(stdout,
-          "----------------------------------------------------------------\n");
+  fprintf(
+    stdout,
+    "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 }
 
 void
