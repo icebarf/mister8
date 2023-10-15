@@ -249,4 +249,66 @@ opcode_fx0a(uint16_t* pc, uint8_t* vx)
     *pc += 2;
 }
 
+/* set delay timer to vx */
+static inline void
+opcode_fx15(uint8_t* delay_timer, uint8_t vx)
+{
+  *delay_timer = vx;
+}
+
+/* set sound timer to vx */
+static inline void
+opcode_fx18(uint8_t* sound_timer, uint8_t vx)
+{
+  *sound_timer = vx;
+}
+
+/* vx = vx + index register */
+static inline void
+opcode_fx1e(uint16_t* index, uint8_t vx)
+{
+  *index += vx;
+}
+
+/* load font sprite address in index register */
+static inline void
+opcode_fx29(uint16_t* index, uint8_t vx)
+{
+  /* mister8 implementation loads font at address 0x0000.
+   * each font sprite is 5 bytes, so each sprite is at an adress
+   * which is a multiple of 5 */
+  *index = 5 * (vx & 0x0f); // original cosmic vip behavior
+                            // consider character as lower
+                            // nibble of value in vx.
+}
+
+/* store BCD representation of value in vx at I, I+1, I+2 */
+static inline void
+opcode_fx33(memory_t* mem, uint16_t index, uint8_t vx)
+{
+  (*mem)[index] = vx / 100;             // Hundreds : 234 / 100 = 1
+  (*mem)[index + 1] = ((vx / 10) % 10); // Tens     : (234/10) = 23, 23 % 10 = 3
+  (*mem)[index + 2] = vx % 10;          // Ones     : 234 % 10  = 4
+}
+
+/* store values from v0 to vX (inclusive) at mem[index] to mem[index + X].
+ * Index is set to index + X + 1*/
+static inline void
+opcode_fx55(memory_t* mem, registers_t* reg, uint16_t* index, uint8_t x)
+{
+  x++;
+  memcpy(&((*mem)[*index]), &(*reg)[0], x);
+  *index += x;
+}
+
+/* store values from mem[index] to mem[index + X] at v0 to vX (inclusive)
+ * Index is set to index + X + 1*/
+static inline void
+opcode_fx65(memory_t* mem, registers_t* reg, uint16_t* index, uint8_t x)
+{
+  x++;
+  memcpy(&(*reg)[0], &((*mem)[*index]), x);
+  *index += x;
+}
+
 #endif
