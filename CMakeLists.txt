@@ -7,9 +7,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 add_executable(mister8)
-target_sources(mister8 PRIVATE src/main.c
+target_sources(mister8 
+                       PRIVATE src/instructions.h
                        PRIVATE src/chip8.h
-                       PRIVATE src/instructions.c
+                       PRIVATE src/main.c
                        PRIVATE src/util.c
                        PRIVATE src/util.h
               )
