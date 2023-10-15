@@ -6,29 +6,36 @@
 
 #include <string.h>
 
+/* see: https://en.wikipedia.org/wiki/Inline_function#C99
+ * rationale behind having 'static inline' functions defined in header file:
+ * even though it may cause duplicate code to be generated,
+ * this file will only be included in main.c and then each of
+ * the inline functions shall only be used/called once
+ */
+
 /* clear display */
-inline void
+static inline void
 opcode_00e0(display_t* display)
 {
   memset(*display, 0, sizeof(*display));
 }
 
 /* ret */
-inline void
+static inline void
 opcode_00ee(uint16_t* pc, stack_t* stack, uint8_t* stack_counter)
 {
   *pc = $pop(stack, stack_counter);
 }
 
 /* jump to dest (nnn) */
-inline void
+static inline void
 opcode_1nnn(uint16_t* pc, uint16_t dest)
 {
   *pc = dest;
 }
 
 /* call */
-inline void
+static inline void
 opcode_2nnn(uint16_t* pc, stack_t* stack, uint8_t* stack_counter, uint16_t dest)
 {
   $push(stack, stack_counter, *pc);
@@ -36,7 +43,7 @@ opcode_2nnn(uint16_t* pc, stack_t* stack, uint8_t* stack_counter, uint16_t dest)
 }
 
 /* set register to value */
-inline void
+static inline void
 opcode_6xnn(registers_t* registers, uint8_t reg, uint8_t val)
 {
   if (reg >= REGISTER_COUNT)
@@ -45,7 +52,7 @@ opcode_6xnn(registers_t* registers, uint8_t reg, uint8_t val)
 }
 
 /* add value to register */
-inline void
+static inline void
 opcode_7xnn(registers_t* registers, uint8_t reg, uint8_t val)
 {
   if (reg >= REGISTER_COUNT)
@@ -54,14 +61,14 @@ opcode_7xnn(registers_t* registers, uint8_t reg, uint8_t val)
 }
 
 /* set index register to address */
-inline void
+static inline void
 opcode_annn(uint16_t* index, uint16_t address)
 {
   *index = address;
 }
 
 /* draw sprite to screen */
-inline void
+static inline void
 opcode_dxyn(memory_t* mem,
             display_t* disp,
             registers_t* registers,
@@ -86,5 +93,4 @@ opcode_dxyn(memory_t* mem,
     }
   }
 }
-
 #endif

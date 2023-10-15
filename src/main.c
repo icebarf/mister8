@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "chip8.h"
 #include "instructions.h"
@@ -30,7 +31,7 @@ inline uint16_t
 fetch(memory_t* memory, uint16_t* pc)
 {
   uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[(*pc) + 1]);
-  pc += 2;
+  *pc += 2;
   return inst;
 }
 
@@ -74,6 +75,7 @@ decode(struct system* chip8, uint16_t instruction)
 
     case 0xa:
       opcode_annn(&chip8->index_register, $high_nib_low_byte(instruction));
+      break;
 
     case 0xd:
       opcode_dxyn(&chip8->memory,
@@ -84,6 +86,9 @@ decode(struct system* chip8, uint16_t instruction)
                   nibble(2, instruction),
                   nibble(1, instruction));
       break;
+    default:
+      fprintf(stderr, "Unrecognised instruction: 0x%4x\n", instruction);
+      exit(1);
   }
 }
 
@@ -101,4 +106,12 @@ main(int argc, char** argv)
   if (read_bytes <= 0)
     return 1;
   fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
+  dump_memory(read_bytes, &chip8.memory);
+
+  chip8.program_counter = PROG_LOAD_ADDRESS;
+  while (1) {
+    uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
+    decode(&chip8, instruction);
+    dump_display(&chip8.display);
+  }
 }
