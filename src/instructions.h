@@ -44,7 +44,7 @@ opcode_2nnn(uint16_t* pc, stack_t* stack, uint8_t* stack_counter, uint16_t dest)
 
 /* skip instruction if vx == byte */
 static inline void
-opcode_3xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
+opcode_3xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
 {
   if (vx == byte)
     *pc += 2;
@@ -52,7 +52,7 @@ opcode_3xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
 
 /* skip instruction if vx != byte */
 static inline void
-opcode_4xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
+opcode_4xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
 {
   if (vx != byte)
     *pc += 2;
@@ -60,7 +60,7 @@ opcode_4xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
 
 /* skip instruction if vx == vy */
 static inline void
-opcode_5xy0(uint8_t vx, uint8_t vy, uint8_t* pc)
+opcode_5xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
 {
   if (vx == vy)
     *pc += 2;
@@ -158,12 +158,24 @@ opcode_8xvye(uint8_t* vx, uint8_t vy, uint8_t* vf)
   *vx = (uint8_t)(vy << 1);
 }
 
+/* skip instruction if vx != vy */
+static inline void
+opcode_9xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
+{
+  if (vx != vy)
+    *pc += 2;
+}
+
 /* set index register to address */
 static inline void
 opcode_annn(uint16_t* index, uint16_t address)
 {
   *index = address;
 }
+
+/* jump to address + v0 */
+static inline void
+opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0);
 
 /* draw sprite to screen */
 static inline void
