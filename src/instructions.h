@@ -216,7 +216,13 @@ opcode_dxyn(memory_t* mem,
 
         (*disp)[(x + col) + ((y + row) * DISPLAY_W)] ^= 1;
       }
+
+      if (col + y > DISPLAY_H)
+        break;
     }
+
+    if (row + x > DISPLAY_W)
+      break;
   }
 }
 
