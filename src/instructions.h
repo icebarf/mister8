@@ -42,6 +42,30 @@ opcode_2nnn(uint16_t* pc, stack_t* stack, uint8_t* stack_counter, uint16_t dest)
   *pc = dest;
 }
 
+/* skip instruction if vx == byte */
+static inline void
+opcode_3xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
+{
+  if (vx == byte)
+    *pc += 2;
+}
+
+/* skip instruction if vx != byte */
+static inline void
+opcode_4xnn(uint8_t vx, uint8_t byte, uint8_t* pc)
+{
+  if (vx != byte)
+    *pc += 2;
+}
+
+/* skip instruction if vx == vy */
+static inline void
+opcode_5xy0(uint8_t vx, uint8_t vy, uint8_t* pc)
+{
+  if (vx == vy)
+    *pc += 2;
+}
+
 /* set register to value */
 static inline void
 opcode_6xnn(registers_t* registers, uint8_t reg, uint8_t val)
@@ -58,6 +82,80 @@ opcode_7xnn(registers_t* registers, uint8_t reg, uint8_t val)
   if (reg >= REGISTER_COUNT)
     __builtin_unreachable();
   (*registers)[reg] += val;
+}
+
+/* store vy in vx */
+static inline void
+opcode_8xy0(uint8_t* vx, uint8_t vy)
+{
+  *vx = vy;
+}
+
+/* set vx to vx OR vy */
+static inline void
+opcode_8xy1(uint8_t* vx, uint8_t vy)
+{
+  *vx = *vx | vy;
+}
+
+/* set vx to vx AND vy */
+static inline void
+opcode_8xy2(uint8_t* vx, uint8_t vy)
+{
+  *vx = *vx & vy;
+}
+
+/* set vx to vx XOR vy */
+static inline void
+opcode_8xy3(uint8_t* vx, uint8_t vy)
+{
+  *vx = *vx ^ vy;
+}
+
+/* add vx to vy, set vf if carry occurs */
+static inline void
+opcode_8xy4(uint8_t* vx, uint8_t vy, uint8_t* vf)
+{
+  *vf = vy > (UINT8_MAX - *vx);
+  *vx += vy;
+}
+
+/* sub vy from vx, set vf if borrow does not occur */
+static inline void
+opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
+{
+  *vf = 1;
+  if (*vx < vy)
+    *vf = 0;
+
+  *vx -= vy;
+}
+
+/* set vx to vy right shift 1, set vf to least significant bit before shift */
+static inline void
+opcode_8xvy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
+{
+  *vf = (vy & 0x01);
+  *vx = (uint8_t)(vy >> 1);
+}
+
+/* sub vx from vy, set vf if borrow does not occur */
+static inline void
+opcode_8xy7(uint8_t* vx, uint8_t vy, uint8_t* vf)
+{
+  *vf = 1;
+  if (vy < *vx)
+    *vf = 0;
+
+  *vx = vy - *vx;
+}
+
+/* set vx to vy left shift 1, set vf to most significant bit before shift */
+static inline void
+opcode_8xvye(uint8_t* vx, uint8_t vy, uint8_t* vf)
+{
+  *vf = (vy & 0x80);
+  *vx = (uint8_t)(vy << 1);
 }
 
 /* set index register to address */
