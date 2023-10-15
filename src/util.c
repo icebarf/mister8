@@ -59,6 +59,41 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
   return (int)read_bytes;
 }
 
+void
+dump_display(display_t display[static 1])
+{
+  fprintf(stdout,
+          "----------------------------------------------------------------\n");
+  for (int y = 0; y < 32; y++) {
+    for (int x = 0; x < 64; x++) {
+      fprintf(stdout, "%i", (*display)[x + y * DISPLAY_W]);
+    }
+    fprintf(stdout, "\n");
+  }
+  fprintf(stdout,
+          "----------------------------------------------------------------\n");
+}
+
+void
+dump_memory(int bytes, memory_t* mem)
+{
+  fprintf(stdout,
+          "---------------------------MEMORY-------------------------------\n");
+
+  for (int x = 0; x < bytes; x += 6) {
+    fprintf(stdout,
+            "%3x-%3x\t\t%2x %2x %2x %2x %2x %2x\n",
+            PROG_LOAD_ADDRESS + x,
+            PROG_LOAD_ADDRESS + x + 5,
+            (*mem)[PROG_LOAD_ADDRESS + x],
+            (*mem)[PROG_LOAD_ADDRESS + x + 1],
+            (*mem)[PROG_LOAD_ADDRESS + x + 2],
+            (*mem)[PROG_LOAD_ADDRESS + x + 3],
+            (*mem)[PROG_LOAD_ADDRESS + x + 4],
+            (*mem)[PROG_LOAD_ADDRESS + x + 5]);
+  }
+}
+
 /* 0xABCD
  * pos = 1: D
  * pos = 2: C

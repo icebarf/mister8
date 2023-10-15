@@ -14,6 +14,12 @@ typedef uint8_t(registers_t)[REGISTER_COUNT];
 int
 read_file(const char fname[static 1], memory_t dest_memory[static 1]);
 
+void
+dump_display(display_t display[static 1]);
+
+void
+dump_memory(int bytes, memory_t* mem);
+
 /* opcode utils */
 
 /* 0xABCD
@@ -29,14 +35,14 @@ nibble(uint8_t pos, uint16_t number);
  * low_byte: 0xCD
  * high_byte: 0xAB
  */
-#define $low_byte(X) (X & 0x00ff)
+#define $low_byte(X) ((uint8_t)(X & 0x00ff))
 
-#define $high_byte(X) ((X & 0xff00) >> 8)
+#define $high_byte(X) ((uint8_t)(X & 0xff00) >> 8)
 
 /* 0xABCD
  * high byte's first nibble and low byte combined
  */
-#define $high_nib_low_byte(X) (X & 0x0fff)
+#define $high_nib_low_byte(X) (((uint8_t)X & 0x0fff))
 
 /* stack utils */
 #define $pop(stack_p, stack_cntr_p) (*stack)[(*stack_cntr_p)--]
