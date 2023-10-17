@@ -8,13 +8,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(mister8)
 target_sources(mister8 
-                       PRIVATE src/instructions.h
                        PRIVATE src/chip8.h
+                       PRIVATE src/instructions.h
+                       PRIVATE src/input.c
+                       PRIVATE src/input.h
                        PRIVATE src/main.c
                        PRIVATE src/util.c
                        PRIVATE src/util.h
               )
-target_compile_options(mister8 PUBLIC -Wall -Wextra -Wpedantic
+target_compile_options(mister8 PUBLIC -Wall -Wextra -Wpedantic -Wno-dollar-in-identifier-extension
                                       -Wshadow -Wconversion -O3
                                       )
 target_link_options(mister8 PUBLIC -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
