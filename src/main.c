@@ -114,6 +114,59 @@ decode(struct system* chip8, uint16_t instruction)
         &chip8->registers, nibble(3, instruction), $low_byte(instruction));
       break;
 
+    case 0x8:
+      switch (nibble(1, instruction)) {
+        case 0x0:
+          opcode_8xy0(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)]);
+          break;
+
+        case 0x1:
+          opcode_8xy1(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)]);
+          break;
+
+        case 0x2:
+          opcode_8xy2(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)]);
+          break;
+
+        case 0x3:
+          opcode_8xy3(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)]);
+          break;
+
+        case 0x4:
+          opcode_8xy4(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)],
+                      &chip8->registers[0xf]);
+          break;
+
+        case 0x5:
+          opcode_8xy5(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)],
+                      &chip8->registers[0xf]);
+          break;
+
+        case 0x6:
+          opcode_8xy6(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)],
+                      &chip8->registers[0xf]);
+          break;
+
+        case 0x7:
+          opcode_8xy7(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)],
+                      &chip8->registers[0xf]);
+          break;
+
+        case 0xe:
+          opcode_8xye(&chip8->registers[nibble(3, instruction)],
+                      chip8->registers[nibble(2, instruction)],
+                      &chip8->registers[0xf]);
+          break;
+      }
+
     case 0xa:
       opcode_annn(&chip8->index_register, $high_nib_low_byte(instruction));
       break;

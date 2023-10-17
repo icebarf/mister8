@@ -140,7 +140,7 @@ opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* set vx to vy right shift 1, set vf to least significant bit before shift */
 static inline void
-opcode_8xvy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
   *vf = (vy & 0x01);
   *vx = (uint8_t)(vy >> 1);
@@ -159,7 +159,7 @@ opcode_8xy7(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* set vx to vy left shift 1, set vf to most significant bit before shift */
 static inline void
-opcode_8xvye(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xye(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
   *vf = (vy & 0x80);
   *vx = (uint8_t)(vy << 1);
