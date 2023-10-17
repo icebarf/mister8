@@ -25,7 +25,8 @@ get_random_uint8(void);
 
 /* opcode utils */
 
-/* 0xABCD
+/* least significant nibble of the least significant byte has position 1.
+ * 0xABCD
  * pos = 1: D
  * pos = 2: C
  * pos = 3: B
