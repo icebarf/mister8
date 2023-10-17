@@ -49,7 +49,7 @@ draw_display(display_t* disp)
   }
 }
 
-inline uint16_t
+static inline uint16_t
 fetch(memory_t* memory, uint16_t* pc)
 {
   uint16_t inst = (uint16_t)((*memory)[*pc] << 8 | (*memory)[*pc + 1]);
@@ -285,6 +285,7 @@ main(int argc, char** argv)
 
   InitWindow(
     DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
+  SetTargetFPS(800);
 
   struct system chip8 = {
     .display = { 0 },
@@ -303,13 +304,22 @@ main(int argc, char** argv)
     return 1;
   fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
   dump_memory(read_bytes, &chip8.memory);
-
+  float time = 0;
   while (!WindowShouldClose()) {
     BeginDrawing();
     draw_display(&chip8.display);
     EndDrawing();
 
-    store_key_pressed();
+    time += GetFrameTime();
+    if (time <= 1.001f && time >= 0.99) {
+      if (chip8.sound_timer)
+        chip8.sound_timer--;
+      if (chip8.delay_timer)
+        chip8.delay_timer--;
+      time = 0;
+    }
+
+    update_keys();
 
     uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
     decode(&chip8, instruction);

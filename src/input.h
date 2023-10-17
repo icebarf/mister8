@@ -10,12 +10,14 @@ enum
 };
 
 void
-store_key_pressed(void);
+update_keys(void);
 
 bool
-is_key_pressed(int key);
+is_key_released(int key);
 
 uint8_t
 any_pressed_key(void);
 
+uint8_t
+get_keypress(void);
 #endif

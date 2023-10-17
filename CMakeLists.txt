@@ -17,7 +17,7 @@ target_sources(mister8
                        PRIVATE src/util.h
               )
 target_compile_options(mister8 PUBLIC -Wall -Wextra -Wpedantic -Wno-dollar-in-identifier-extension
-                                      -Wshadow -Wconversion -Og -g
+                                      -Wshadow -Wconversion -O0 -g3
                                       )
 target_link_options(mister8 PUBLIC -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
                    )

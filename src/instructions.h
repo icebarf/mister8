@@ -239,7 +239,7 @@ opcode_dxyn(memory_t* mem,
 static inline void
 opcode_ex9e(uint16_t* pc, uint8_t key)
 {
-  if (is_key_pressed(key))
+  if (!is_key_released(key))
     *pc += 2;
 }
 
@@ -247,7 +247,7 @@ opcode_ex9e(uint16_t* pc, uint8_t key)
 static inline void
 opcode_exa1(uint16_t* pc, uint8_t key)
 {
-  if (!is_key_pressed(key))
+  if (is_key_released(key))
     *pc += 2;
 }
 
@@ -263,9 +263,11 @@ static inline void
 opcode_fx0a(uint16_t* pc, uint8_t* vx)
 {
   *pc -= 2;
-  *vx = any_pressed_key();
-  if ((!is_key_pressed(*vx)) && (*vx != INVALID_KEY))
+  uint8_t key = get_keypress();
+  if (key != INVALID_KEY) {
     *pc += 2;
+    *vx = key;
+  }
 }
 
 /* set delay timer to vx */
