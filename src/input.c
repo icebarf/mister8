@@ -2,61 +2,107 @@
 
 #include <raylib.h>
 
-uint8_t
-get_key_pressed(void)
+enum
 {
-  int key = GetKeyPressed();
-  switch (key) {
-    /* 1 2 3 C */
-    case KEY_ONE:
-      return 0x1;
-    case KEY_TWO:
-      return 0x2;
-    case KEY_THREE:
-      return 0x3;
-    case KEY_FOUR:
-      return 0xC;
+  KEY_COUNT = 16
+};
 
-    /* 4 5 6 D */
-    case KEY_Q:
-      return 0x4;
-    case KEY_W:
-      return 0x5;
-    case KEY_E:
-      return 0x6;
-    case KEY_R:
-      return 0xD;
+/* must be written-to by store_key_pressed, and
+ * read-from by is_key_pressed.
+ * 1 means down (pressed), 0 means up (released)
+ */
+static uint8_t keys[KEY_COUNT] = { 0 };
 
-    /* 7 8 9 E */
-    case KEY_A:
-      return 0x7;
-    case KEY_S:
-      return 0x8;
-    case KEY_D:
-      return 0x9;
-    case KEY_F:
-      return 0xE;
+void
+store_key_pressed(void)
+{
+  /* 1 2 3 C */
+  if (IsKeyDown(KEY_ONE))
+    keys[0x1] = 1;
+  else
+    keys[0x1] = 0;
+  if (IsKeyDown(KEY_TWO))
+    keys[0x2] = 1;
+  else
+    keys[0x2] = 0;
+  if (IsKeyDown(KEY_THREE))
+    keys[0x3] = 1;
+  else
+    keys[0x3] = 0;
+  if (IsKeyDown(KEY_FOUR))
+    keys[0xC] = 1;
+  else
+    keys[0xC] = 0;
 
-    /* A 0 B F */
-    case KEY_Z:
-      return 0xA;
-    case KEY_X:
-      return 0x0;
-    case KEY_C:
-      return 0xB;
-    case KEY_V:
-      return 0xF;
+  /* 4 5 6 D */
+  if (IsKeyDown(KEY_Q))
+    keys[0x4] = 1;
+  else
+    keys[0x4] = 0;
+  if (IsKeyDown(KEY_W))
+    keys[0x5] = 1;
+  else
+    keys[0x5] = 0;
+  if (IsKeyDown(KEY_E))
+    keys[0x6] = 1;
+  else
+    keys[0x6] = 0;
+  if (IsKeyDown(KEY_R))
+    keys[0xD] = 1;
+  else
+    keys[0xD] = 0;
 
-      /* non chip8 input key */
-    default:
-      return INVALID_KEY;
-  }
+  /* 7 8 9 E */
+  if (IsKeyDown(KEY_A))
+    keys[0x7] = 1;
+  else
+    keys[0x7] = 0;
+  if (IsKeyDown(KEY_S))
+    keys[0x8] = 1;
+  else
+    keys[0x8] = 0;
+  if (IsKeyDown(KEY_D))
+    keys[0x9] = 1;
+  else
+    keys[0x9] = 0;
+  if (IsKeyDown(KEY_F))
+    keys[0xE] = 1;
+  else
+    keys[0xE] = 0;
+
+  /* A 0 B F */
+  if (IsKeyDown(KEY_Z))
+    keys[0xA] = 1;
+  else
+    keys[0xA] = 0;
+  if (IsKeyDown(KEY_X))
+    keys[0x0] = 1;
+  else
+    keys[0x0] = 0;
+  if (IsKeyDown(KEY_C))
+    keys[0xB] = 1;
+  else
+    keys[0xB] = 0;
+  if (IsKeyDown(KEY_V))
+    keys[0xF] = 1;
+  else
+    keys[0xF] = 0;
 }
 
 bool
 is_key_pressed(int key)
 {
-  if (get_key_pressed() == key)
+  if (keys[key])
     return true;
   return false;
+}
+
+uint8_t
+any_pressed_key(void)
+{
+  for (uint8_t i = 0; i < KEY_COUNT; i++) {
+    if (keys[i])
+      return i;
+  }
+  return INVALID_KEY;
 }

@@ -9,10 +9,13 @@ enum
   INVALID_KEY = UINT8_MAX,
 };
 
-uint8_t
-get_key_pressed(void);
+void
+store_key_pressed(void);
 
 bool
 is_key_pressed(int key);
+
+uint8_t
+any_pressed_key(void);
 
 #endif

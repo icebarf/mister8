@@ -119,50 +119,56 @@ opcode_8xy3(uint8_t* vx, uint8_t vy)
 static inline void
 opcode_8xy4(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = vy > (UINT8_MAX - *vx); // sum of individual components should not be
-                                // larger than the MAX value supported. Thus,
-                                // one individual component being larger than
-                                // MAX - other component, implies to us that
-                                // there will be a carry or an overflow.
+  uint8_t flag =
+    vy > (UINT8_MAX - *vx); // sum of individual components should not be
+                            // larger than the MAX value supported. Thus,
+                            // one individual component being larger than
+                            // MAX - other component, implies to us that
+                            // there will be a carry or an overflow.
   *vx += vy;
+  *vf = flag;
 }
 
 /* vx = vx - vy , set vf if borrow does not occur */
 static inline void
 opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = 1;
+  uint8_t flag = 1;
   if (*vx < vy) // simple elementary school math
-    *vf = 0;
+    flag = 0;
 
   *vx -= vy;
+  *vf = flag;
 }
 
 /* set vx to vy right shift 1, set vf to least significant bit before shift */
 static inline void
 opcode_8xy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = (vy & 0x01);
+  uint8_t flag = (vy & 0x01);
   *vx = (uint8_t)(vy >> 1);
+  *vf = flag;
 }
 
 /* sub vx from vy, set vf if borrow does not occur */
 static inline void
 opcode_8xy7(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = 1;
+  uint8_t flag = 1;
   if (vy < *vx)
-    *vf = 0;
+    flag = 0;
 
   *vx = vy - *vx;
+  *vf = flag;
 }
 
 /* set vx to vy left shift 1, set vf to most significant bit before shift */
 static inline void
 opcode_8xye(uint8_t* vx, uint8_t vy, uint8_t* vf)
 {
-  *vf = (vy & 0x80);
+  uint8_t flag = (vy & 0x80) >> 7;
   *vx = (uint8_t)(vy << 1);
+  *vf = flag;
 }
 
 /* skip instruction if vx != vy */
@@ -257,7 +263,7 @@ static inline void
 opcode_fx0a(uint16_t* pc, uint8_t* vx)
 {
   *pc -= 2;
-  *vx = get_key_pressed();
+  *vx = any_pressed_key();
   if ((!is_key_pressed(*vx)) && (*vx != INVALID_KEY))
     *pc += 2;
 }
