@@ -285,7 +285,6 @@ main(int argc, char** argv)
 
   InitWindow(
     DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
-  SetTargetFPS(60);
 
   struct system chip8 = {
     .display = { 0 },
@@ -309,6 +308,8 @@ main(int argc, char** argv)
     BeginDrawing();
     draw_display(&chip8.display);
     EndDrawing();
+
+    store_key_pressed();
 
     uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
     decode(&chip8, instruction);
