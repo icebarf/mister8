@@ -166,9 +166,27 @@ decode(struct system* chip8, uint16_t instruction)
                       &chip8->registers[0xf]);
           break;
       }
+      break;
+
+    case 0x9:
+      opcode_9xy0(&chip8->program_counter,
+                  chip8->registers[nibble(3, instruction)],
+                  chip8->registers[nibble(2, instruction)]);
+      break;
 
     case 0xa:
       opcode_annn(&chip8->index_register, $high_nib_low_byte(instruction));
+      break;
+
+    case 0xb:
+      opcode_bnnn(&chip8->program_counter,
+                  $high_nib_low_byte(instruction),
+                  chip8->registers[0x0]);
+      break;
+
+    case 0xc:
+      opcode_cxnn(&chip8->registers[nibble(3, instruction)],
+                  $low_byte(instruction));
       break;
 
     case 0xd:
@@ -180,6 +198,74 @@ decode(struct system* chip8, uint16_t instruction)
                   nibble(2, instruction),
                   nibble(1, instruction));
       break;
+
+    case 0xe:
+      switch ($low_byte(instruction)) {
+        case 0x9e:
+          opcode_ex9e(&chip8->program_counter,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0xa1:
+          opcode_exa1(&chip8->program_counter,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+      }
+      break;
+
+    case 0xf:
+      switch ($low_byte(instruction)) {
+        case 0x07:
+          opcode_fx07(chip8->delay_timer,
+                      &chip8->registers[nibble(3, instruction)]);
+          break;
+        case 0x0a:
+          opcode_fx0a(&chip8->program_counter,
+                      &chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x15:
+          opcode_fx15(&chip8->delay_timer,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x18:
+          opcode_fx18(&chip8->sound_timer,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x1e:
+          opcode_fx1e(&chip8->index_register,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x29:
+          opcode_fx29(&chip8->index_register,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x33:
+          opcode_fx33(&chip8->memory,
+                      chip8->index_register,
+                      chip8->registers[nibble(3, instruction)]);
+          break;
+
+        case 0x55:
+          opcode_fx55(&chip8->memory,
+                      &chip8->registers,
+                      &chip8->index_register,
+                      nibble(3, instruction));
+          break;
+
+        case 0x65:
+          opcode_fx65(&chip8->memory,
+                      &chip8->registers,
+                      &chip8->index_register,
+                      nibble(3, instruction));
+          break;
+      }
+      break;
+
     default:
       fprintf(stderr,
               "Unrecognised instruction: 0x%4x\nProgram Counter for "
