@@ -1,3 +1,4 @@
+#include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -104,6 +105,9 @@ main(int argc, char** argv)
     return 0;
   }
 
+  InitWindow(DISPLAY_W * 4, DISPLAY_H * 4, "mister8 - alpha");
+  SetTargetFPS(60);
+
   struct system chip8 = {
     .display = { 0 },
     .memory = font,
@@ -122,9 +126,16 @@ main(int argc, char** argv)
   fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
   dump_memory(read_bytes, &chip8.memory);
 
-  while (1) {
+  while (!WindowShouldClose()) {
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+    DrawText("mister8 gfx", (DISPLAY_W) / 2, (DISPLAY_H * 3) / 2, 22, SKYBLUE);
+    EndDrawing();
+
     uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
     decode(&chip8, instruction);
     dump_display(&chip8.display);
   }
+
+  CloseWindow();
 }
