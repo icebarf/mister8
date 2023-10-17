@@ -86,6 +86,24 @@ decode(struct system* chip8, uint16_t instruction)
                   $high_nib_low_byte(instruction));
       break;
 
+    case 0x3:
+      opcode_3xnn(&chip8->program_counter,
+                  chip8->registers[nibble(3, instruction)],
+                  $low_byte(instruction));
+      break;
+
+    case 0x4:
+      opcode_4xnn(&chip8->program_counter,
+                  chip8->registers[nibble(3, instruction)],
+                  $low_byte(instruction));
+      break;
+
+    case 0x5:
+      opcode_5xy0(&chip8->program_counter,
+                  chip8->registers[nibble(3, instruction)],
+                  chip8->registers[nibble(2, instruction)]);
+      break;
+
     case 0x6:
       opcode_6xnn(
         &chip8->registers, nibble(3, instruction), $low_byte(instruction));
