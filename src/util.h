@@ -20,6 +20,9 @@ dump_display(display_t display[static 1]);
 void
 dump_memory(int bytes, memory_t* mem);
 
+uint8_t
+get_random_uint8(void);
+
 /* opcode utils */
 
 /* 0xABCD

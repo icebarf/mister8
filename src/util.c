@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <raylib.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -118,4 +119,10 @@ nibble(uint8_t pos, uint16_t number)
       __builtin_unreachable();
       break;
   }
+}
+
+uint8_t
+get_random_uint8(void)
+{
+  return (uint8_t)GetRandomValue(0, UINT8_MAX);
 }

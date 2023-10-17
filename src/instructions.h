@@ -182,7 +182,10 @@ opcode_annn(uint16_t* index, uint16_t address)
 
 /* jump to address + v0 */
 static inline void
-opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0);
+opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0)
+{
+  *pc = addr + v0;
+}
 
 /* set vx to random number masked with byte
  * we're just gonna use C's shitty rand() prng
@@ -190,7 +193,7 @@ opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0);
 static inline void
 opcode_cxnn(uint8_t* vx, uint8_t byte)
 {
-  *vx = (rand() % UINT8_MAX) & byte;
+  *vx = get_random_uint8() & byte;
 }
 
 /* draw sprite to screen */
