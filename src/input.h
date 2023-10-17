@@ -1,6 +1,7 @@
 #ifndef MISTER8_INPUT_H
 #define MISTER8_INPUT_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 enum
@@ -11,7 +12,7 @@ enum
 uint8_t
 get_key_pressed(void);
 
-uint8_t
-is_key_released(int key);
+bool
+is_key_pressed(int key);
 
 #endif

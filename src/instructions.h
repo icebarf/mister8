@@ -231,17 +231,17 @@ opcode_dxyn(memory_t* mem,
 
 /* skip instruction if hex value of key in vx is pressed (down) */
 static inline void
-opcode_ex9e(uint16_t* pc, uint8_t key, bool (*key_pressed)(int))
+opcode_ex9e(uint16_t* pc, uint8_t key)
 {
-  if (key_pressed(key))
+  if (is_key_pressed(key))
     *pc += 2;
 }
 
 /* skip instruction if hex value of key in vx is not pressed (up) */
 static inline void
-opcode_exa1(uint16_t* pc, uint8_t key, bool (*key_pressed)(int))
+opcode_exa1(uint16_t* pc, uint8_t key)
 {
-  if (!key_pressed(key))
+  if (!is_key_pressed(key))
     *pc += 2;
 }
 
@@ -258,7 +258,7 @@ opcode_fx0a(uint16_t* pc, uint8_t* vx)
 {
   *pc -= 2;
   *vx = get_key_pressed();
-  if (is_key_released(*vx) && *vx != INVALID_KEY)
+  if ((!is_key_pressed(*vx)) && (*vx != INVALID_KEY))
     *pc += 2;
 }
 

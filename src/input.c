@@ -53,10 +53,10 @@ get_key_pressed(void)
   }
 }
 
-uint8_t
-is_key_released(int key)
+bool
+is_key_pressed(int key)
 {
-  if (IsKeyReleased(key))
+  if (get_key_pressed() == key)
     return true;
   return false;
 }
