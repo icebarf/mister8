@@ -45,7 +45,6 @@ draw_display(display_t* disp)
                       DRAWING_SCALE,
                       DRAWING_SCALE,
                       DARKGREEN);
-      ;
     }
   }
 }
@@ -308,7 +307,6 @@ main(int argc, char** argv)
 
   while (!WindowShouldClose()) {
     BeginDrawing();
-    ClearBackground(DARKGREEN);
     draw_display(&chip8.display);
     EndDrawing();
 

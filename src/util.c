@@ -114,7 +114,7 @@ nibble(uint8_t pos, uint16_t number)
     case 3:
       return (number & 0x0f00) >> 8;
     case 4:
-      return (uint8_t)(number & 0xf000) >> 12;
+      return (uint8_t)((number & 0xf000) >> 12);
     default:
       __builtin_unreachable();
       break;
