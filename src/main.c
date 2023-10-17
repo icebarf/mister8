@@ -28,6 +28,28 @@
 }
 // clang-format on
 
+void
+draw_display(display_t* disp)
+{
+  for (int y = 0; y < DISPLAY_H; y++) {
+    for (int x = 0; x < DISPLAY_W; x++) {
+      if ((*disp)[x + y * DISPLAY_W])
+        DrawRectangle(x * DRAWING_SCALE,
+                      y * DRAWING_SCALE,
+                      DRAWING_SCALE,
+                      DRAWING_SCALE,
+                      GOLD);
+      else
+        DrawRectangle(x * DRAWING_SCALE,
+                      y * DRAWING_SCALE,
+                      DRAWING_SCALE,
+                      DRAWING_SCALE,
+                      DARKGREEN);
+      ;
+    }
+  }
+}
+
 inline uint16_t
 fetch(memory_t* memory, uint16_t* pc)
 {
@@ -105,7 +127,8 @@ main(int argc, char** argv)
     return 0;
   }
 
-  InitWindow(DISPLAY_W * 4, DISPLAY_H * 4, "mister8 - alpha");
+  InitWindow(
+    DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
   SetTargetFPS(60);
 
   struct system chip8 = {
@@ -128,13 +151,12 @@ main(int argc, char** argv)
 
   while (!WindowShouldClose()) {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
-    DrawText("mister8 gfx", (DISPLAY_W) / 2, (DISPLAY_H * 3) / 2, 22, SKYBLUE);
+    ClearBackground(DARKGREEN);
+    draw_display(&chip8.display);
     EndDrawing();
 
     uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
     decode(&chip8, instruction);
-    dump_display(&chip8.display);
   }
 
   CloseWindow();
