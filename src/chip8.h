@@ -1,6 +1,7 @@
 #ifndef MISTER8_CHIP8_H
 #define MISTER8_CHIP8_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 enum Constants
@@ -14,7 +15,10 @@ enum Constants
   BYTES_RESERVED_LOW = 512,
   BYTES_RESERVED_HIGH = 352,
   PROG_LOAD_ADDRESS = 0x200,
-  DRAWING_SCALE = 8
+  DRAWING_SCALE = 8,
+  INSTRUCTIONS_PER_FRAME = 16, // ipf - instructions to execute per frame.
+  TIMER_DECREMENT_VALUE = 1, // decrement timer by this value per framce. Should
+                             // be 1 if trying to maintain 60 frames per second.
 };
 
 #ifndef MISTER8_DONT_WANT_SYSTEM
@@ -29,6 +33,7 @@ struct system
   uint8_t delay_timer;
   uint8_t sound_timer;
   uint8_t stack_counter;
+  bool display_modified;
 };
 #endif
 

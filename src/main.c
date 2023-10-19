@@ -29,24 +29,26 @@
 // clang-format on
 
 void
-draw_display(display_t* disp)
+draw_display(display_t* disp, bool* modified)
 {
-  for (int y = 0; y < DISPLAY_H; y++) {
-    for (int x = 0; x < DISPLAY_W; x++) {
-      if ((*disp)[x + y * DISPLAY_W])
-        DrawRectangle(x * DRAWING_SCALE,
-                      y * DRAWING_SCALE,
-                      DRAWING_SCALE,
-                      DRAWING_SCALE,
-                      GOLD);
-      else
-        DrawRectangle(x * DRAWING_SCALE,
-                      y * DRAWING_SCALE,
-                      DRAWING_SCALE,
-                      DRAWING_SCALE,
-                      DARKGREEN);
-    }
-  }
+  if (*modified) {
+    for (int y = 0; y < DISPLAY_H; y++) {
+      for (int x = 0; x < DISPLAY_W; x++) {
+        if ((*disp)[x + y * DISPLAY_W])
+          DrawRectangle(x * DRAWING_SCALE,
+                        y * DRAWING_SCALE,
+                        DRAWING_SCALE,
+                        DRAWING_SCALE,
+                        RAYWHITE);
+        else
+          DrawRectangle(x * DRAWING_SCALE,
+                        y * DRAWING_SCALE,
+                        DRAWING_SCALE,
+                        DRAWING_SCALE,
+                        BLACK);
+      } // for y
+    }   // for x
+  }     // if modified
 }
 
 static inline uint16_t
@@ -195,7 +197,8 @@ decode(struct system* chip8, uint16_t instruction)
                   chip8->index_register,
                   nibble(3, instruction),
                   nibble(2, instruction),
-                  nibble(1, instruction));
+                  nibble(1, instruction),
+                  &chip8->display_modified);
       break;
 
     case 0xe:
@@ -285,7 +288,7 @@ main(int argc, char** argv)
 
   InitWindow(
     DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
-  SetTargetFPS(800);
+  SetTargetFPS(60);
 
   struct system chip8 = {
     .display = { 0 },
@@ -303,26 +306,33 @@ main(int argc, char** argv)
   if (read_bytes <= 0)
     return 1;
   fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
-  dump_memory(read_bytes, &chip8.memory);
-  float time = 0;
+
   while (!WindowShouldClose()) {
     BeginDrawing();
-    draw_display(&chip8.display);
+    draw_display(&chip8.display, &chip8.display_modified);
     EndDrawing();
 
-    time += GetFrameTime();
-    if (time <= 1.001f && time >= 0.99) {
-      if (chip8.sound_timer)
-        chip8.sound_timer--;
-      if (chip8.delay_timer)
-        chip8.delay_timer--;
-      time = 0;
-    }
+    /* timers are decremented once per frame. Target FPS is 60, so both timers
+     * need to be decremented by 1 per frame.  (60 frames per second = 60 times
+     * decrementing of timers). Timers need to be decremented at a rate of 60Hz
+     * so you need to adjust the decrementation value accordingly as well. */
+    if (chip8.sound_timer)
+      chip8.sound_timer -= TIMER_DECREMENT_VALUE;
+    if (chip8.delay_timer)
+      chip8.delay_timer -= TIMER_DECREMENT_VALUE;
 
     update_keys();
 
-    uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
-    decode(&chip8, instruction);
+    /* Instructions executed per frame. If we're aiming for 60 fps,
+     * INSTRUCTIONS_PER_SECOND roughly equates to 16. Ofcourse, this is going to
+     * be configurable soon.
+     * A frame is one main loop iteration. X number of
+     * instructions are executed in 1 loop iteration. where X =
+     * INSTRUCTIONS_PER_FRAME */
+    for (int i = 0; i < INSTRUCTIONS_PER_FRAME; i++) {
+      uint16_t instruction = fetch(&chip8.memory, &chip8.program_counter);
+      decode(&chip8, instruction);
+    }
   }
 
   CloseWindow();

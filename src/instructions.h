@@ -210,7 +210,8 @@ opcode_dxyn(memory_t* mem,
             uint16_t vidx,
             uint8_t vx,
             uint8_t vy,
-            uint8_t n)
+            uint8_t n,
+            bool* modified)
 {
   uint8_t x = (*registers)[vx] & 63;
   uint8_t y = (*registers)[vy] & 31;
@@ -233,6 +234,7 @@ opcode_dxyn(memory_t* mem,
     if (row + x > DISPLAY_W)
       break;
   }
+  *modified = true;
 }
 
 /* skip instruction if hex value of key in vx is pressed (down) */
