@@ -25,7 +25,7 @@ read_file(const char fname[static 1], memory_t dest_memory[static 1])
     return -1;
   }
 
-  /* assume the fseek() doesn't fail */
+  /* assume the fseek calls don't fail */
   fseek(rom, 0L, SEEK_END);
   long fsize = ftell(rom);
   fseek(rom, 0L, SEEK_SET);
@@ -78,7 +78,7 @@ dump_display(display_t display[static 1])
 }
 
 void
-dump_memory(int bytes, memory_t* mem)
+dump_memory(const int bytes, const memory_t* mem)
 {
   fprintf(stdout,
           "---------------------------MEMORY-------------------------------\n");
@@ -104,7 +104,7 @@ dump_memory(int bytes, memory_t* mem)
  * pos = 4: A
  */
 uint8_t
-nibble(uint8_t pos, uint16_t number)
+nibble(const uint8_t pos, const uint16_t number)
 {
   switch (pos) {
     case 1:

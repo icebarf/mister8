@@ -18,7 +18,7 @@ void
 dump_display(display_t display[static 1]);
 
 void
-dump_memory(int bytes, memory_t* mem);
+dump_memory(const int bytes, const memory_t* mem);
 
 uint8_t
 get_random_uint8(void);
@@ -33,7 +33,7 @@ get_random_uint8(void);
  * pos = 4: A
  */
 uint8_t
-nibble(uint8_t pos, uint16_t number);
+nibble(const uint8_t pos, const uint16_t number);
 
 /* 0xABCD
  * low_byte: 0xCD
