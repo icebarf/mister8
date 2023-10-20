@@ -13,7 +13,7 @@ void
 update_keys(void);
 
 bool
-is_key_released(int key);
+is_key_released(const int key);
 
 uint8_t
 any_pressed_key(void);

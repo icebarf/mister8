@@ -95,7 +95,7 @@ update_keys(void)
 }
 
 bool
-is_key_released(int key)
+is_key_released(const int key)
 {
   if (keys[key] == KEY_RELEASED)
     return true;
