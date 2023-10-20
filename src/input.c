@@ -21,77 +21,15 @@ void
 update_keys(void)
 {
   memcpy(keys_last, keys, KEY_COUNT);
-  /* 1 2 3 C */
-  if (IsKeyDown(KEY_ONE))
-    keys[0x1] = KEY_HELD;
-  else
-    keys[0x1] = KEY_RELEASED;
-  if (IsKeyDown(KEY_TWO))
-    keys[0x2] = KEY_HELD;
-  else
-    keys[0x2] = KEY_RELEASED;
-  if (IsKeyDown(KEY_THREE))
-    keys[0x3] = KEY_HELD;
-  else
-    keys[0x3] = KEY_RELEASED;
-  if (IsKeyDown(KEY_FOUR))
-    keys[0xC] = KEY_HELD;
-  else
-    keys[0xC] = KEY_RELEASED;
 
-  /* 4 5 6 D */
-  if (IsKeyDown(KEY_Q))
-    keys[0x4] = KEY_HELD;
-  else
-    keys[0x4] = KEY_RELEASED;
-  if (IsKeyDown(KEY_W))
-    keys[0x5] = KEY_HELD;
-  else
-    keys[0x5] = KEY_RELEASED;
-  if (IsKeyDown(KEY_E))
-    keys[0x6] = KEY_HELD;
-  else
-    keys[0x6] = KEY_RELEASED;
-  if (IsKeyDown(KEY_R))
-    keys[0xD] = KEY_HELD;
-  else
-    keys[0xD] = KEY_RELEASED;
-
-  /* 7 8 9 E */
-  if (IsKeyDown(KEY_A))
-    keys[0x7] = KEY_HELD;
-  else
-    keys[0x7] = KEY_RELEASED;
-  if (IsKeyDown(KEY_S))
-    keys[0x8] = KEY_HELD;
-  else
-    keys[0x8] = KEY_RELEASED;
-  if (IsKeyDown(KEY_D))
-    keys[0x9] = KEY_HELD;
-  else
-    keys[0x9] = KEY_RELEASED;
-  if (IsKeyDown(KEY_F))
-    keys[0xE] = KEY_HELD;
-  else
-    keys[0xE] = KEY_RELEASED;
-
-  /* A 0 B F */
-  if (IsKeyDown(KEY_Z))
-    keys[0xA] = KEY_HELD;
-  else
-    keys[0xA] = KEY_RELEASED;
-  if (IsKeyDown(KEY_X))
-    keys[0x0] = KEY_HELD;
-  else
-    keys[0x0] = KEY_RELEASED;
-  if (IsKeyDown(KEY_C))
-    keys[0xB] = KEY_HELD;
-  else
-    keys[0xB] = KEY_RELEASED;
-  if (IsKeyDown(KEY_V))
-    keys[0xF] = KEY_HELD;
-  else
-    keys[0xF] = KEY_RELEASED;
+  int kbd_keys[] = {
+    [0x1] = KEY_ONE, [0x2] = KEY_TWO, [0x3] = KEY_THREE, [0xc] = KEY_FOUR,
+    [0x4] = KEY_Q,   [0x5] = KEY_W,   [0x6] = KEY_E,     [0xd] = KEY_R,
+    [0x7] = KEY_A,   [0x8] = KEY_S,   [0x9] = KEY_D,     [0xe] = KEY_F,
+    [0xa] = KEY_Z,   [0x0] = KEY_X,   [0xb] = KEY_C,     [0xf] = KEY_V
+  };
+  for (unsigned int i = 0; i < sizeof(kbd_keys) / sizeof(kbd_keys[0]); i++)
+    keys[i] = IsKeyDown(kbd_keys[i]);
 }
 
 bool
