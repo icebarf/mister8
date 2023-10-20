@@ -25,14 +25,14 @@ opcode_00e0(display_t* display)
 
 /* ret */
 static inline void
-opcode_00ee(uint16_t* pc, stack_t* stack, uint8_t* stack_counter)
+opcode_00ee(uint16_t* pc, const stack_t* stack, uint8_t* stack_counter)
 {
   *pc = $pop(stack, stack_counter);
 }
 
 /* jump to dest (nnn) */
 static inline void
-opcode_1nnn(uint16_t* pc, uint16_t dest)
+opcode_1nnn(uint16_t* pc, const uint16_t dest)
 {
   *pc = dest;
 }
@@ -47,7 +47,7 @@ opcode_2nnn(uint16_t* pc, stack_t* stack, uint8_t* stack_counter, uint16_t dest)
 
 /* skip instruction if vx == byte */
 static inline void
-opcode_3xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
+opcode_3xnn(uint16_t* pc, const uint8_t vx, const uint8_t byte)
 {
   if (vx == byte)
     *pc += 2;
@@ -55,7 +55,7 @@ opcode_3xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
 
 /* skip instruction if vx != byte */
 static inline void
-opcode_4xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
+opcode_4xnn(uint16_t* pc, const uint8_t vx, const uint8_t byte)
 {
   if (vx != byte)
     *pc += 2;
@@ -63,7 +63,7 @@ opcode_4xnn(uint16_t* pc, uint8_t vx, uint8_t byte)
 
 /* skip instruction if vx == vy */
 static inline void
-opcode_5xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
+opcode_5xy0(uint16_t* pc, const uint8_t vx, const uint8_t vy)
 {
   if (vx == vy)
     *pc += 2;
@@ -71,7 +71,7 @@ opcode_5xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
 
 /* set register to value */
 static inline void
-opcode_6xnn(registers_t* registers, uint8_t reg, uint8_t val)
+opcode_6xnn(registers_t* registers, const uint8_t reg, const uint8_t val)
 {
   if (reg >= REGISTER_COUNT)
     __builtin_unreachable();
@@ -80,7 +80,7 @@ opcode_6xnn(registers_t* registers, uint8_t reg, uint8_t val)
 
 /* add value to register */
 static inline void
-opcode_7xnn(registers_t* registers, uint8_t reg, uint8_t val)
+opcode_7xnn(registers_t* registers, const uint8_t reg, const uint8_t val)
 {
   if (reg >= REGISTER_COUNT)
     __builtin_unreachable();
@@ -89,35 +89,35 @@ opcode_7xnn(registers_t* registers, uint8_t reg, uint8_t val)
 
 /* store vy in vx */
 static inline void
-opcode_8xy0(uint8_t* vx, uint8_t vy)
+opcode_8xy0(uint8_t* vx, const uint8_t vy)
 {
   *vx = vy;
 }
 
 /* set vx to vx OR vy */
 static inline void
-opcode_8xy1(uint8_t* vx, uint8_t vy)
+opcode_8xy1(uint8_t* vx, const uint8_t vy)
 {
   *vx = *vx | vy;
 }
 
 /* set vx to vx AND vy */
 static inline void
-opcode_8xy2(uint8_t* vx, uint8_t vy)
+opcode_8xy2(uint8_t* vx, const uint8_t vy)
 {
   *vx = *vx & vy;
 }
 
 /* set vx to vx XOR vy */
 static inline void
-opcode_8xy3(uint8_t* vx, uint8_t vy)
+opcode_8xy3(uint8_t* vx, const uint8_t vy)
 {
   *vx = *vx ^ vy;
 }
 
 /* add vx to vy, set vf if carry occurs */
 static inline void
-opcode_8xy4(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xy4(uint8_t* vx, const uint8_t vy, uint8_t* vf)
 {
   uint8_t flag =
     vy > (UINT8_MAX - *vx); // sum of individual components should not be
@@ -131,7 +131,7 @@ opcode_8xy4(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* vx = vx - vy , set vf if borrow does not occur */
 static inline void
-opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xy5(uint8_t* vx, const uint8_t vy, uint8_t* vf)
 {
   uint8_t flag = 1;
   if (*vx < vy) // simple elementary school math
@@ -143,7 +143,7 @@ opcode_8xy5(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* set vx to vy right shift 1, set vf to least significant bit before shift */
 static inline void
-opcode_8xy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xy6(uint8_t* vx, const uint8_t vy, uint8_t* vf)
 {
   uint8_t flag = (vy & 0x01);
   *vx = (uint8_t)(vy >> 1);
@@ -152,7 +152,7 @@ opcode_8xy6(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* sub vx from vy, set vf if borrow does not occur */
 static inline void
-opcode_8xy7(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xy7(uint8_t* vx, const uint8_t vy, uint8_t* vf)
 {
   uint8_t flag = 1;
   if (vy < *vx)
@@ -164,7 +164,7 @@ opcode_8xy7(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* set vx to vy left shift 1, set vf to most significant bit before shift */
 static inline void
-opcode_8xye(uint8_t* vx, uint8_t vy, uint8_t* vf)
+opcode_8xye(uint8_t* vx, const uint8_t vy, uint8_t* vf)
 {
   uint8_t flag = (vy & 0x80) >> 7;
   *vx = (uint8_t)(vy << 1);
@@ -173,7 +173,7 @@ opcode_8xye(uint8_t* vx, uint8_t vy, uint8_t* vf)
 
 /* skip instruction if vx != vy */
 static inline void
-opcode_9xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
+opcode_9xy0(uint16_t* pc, const uint8_t vx, const uint8_t vy)
 {
   if (vx != vy)
     *pc += 2;
@@ -181,14 +181,14 @@ opcode_9xy0(uint16_t* pc, uint8_t vx, uint8_t vy)
 
 /* set index register to address */
 static inline void
-opcode_annn(uint16_t* index, uint16_t address)
+opcode_annn(uint16_t* index, const uint16_t address)
 {
   *index = address;
 }
 
 /* jump to address + v0 */
 static inline void
-opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0)
+opcode_bnnn(uint16_t* pc, const uint16_t addr, const uint8_t v0)
 {
   *pc = addr + v0;
 }
@@ -197,7 +197,7 @@ opcode_bnnn(uint16_t* pc, uint16_t addr, uint8_t v0)
  * we're just gonna use C's shitty rand() prng
  */
 static inline void
-opcode_cxnn(uint8_t* vx, uint8_t byte)
+opcode_cxnn(uint8_t* vx, const uint8_t byte)
 {
   *vx = get_random_uint8() & byte;
 }
@@ -207,10 +207,10 @@ static inline void
 opcode_dxyn(memory_t* mem,
             display_t* disp,
             registers_t* registers,
-            uint16_t vidx,
-            uint8_t vx,
-            uint8_t vy,
-            uint8_t n,
+            const uint16_t vidx,
+            const uint8_t vx,
+            const uint8_t vy,
+            const uint8_t n,
             bool* modified)
 {
   uint8_t x = (*registers)[vx] & 63;
@@ -239,7 +239,7 @@ opcode_dxyn(memory_t* mem,
 
 /* skip instruction if hex value of key in vx is pressed (down) */
 static inline void
-opcode_ex9e(uint16_t* pc, uint8_t key)
+opcode_ex9e(uint16_t* pc, const uint8_t key)
 {
   if (!is_key_released(key))
     *pc += 2;
@@ -247,7 +247,7 @@ opcode_ex9e(uint16_t* pc, uint8_t key)
 
 /* skip instruction if hex value of key in vx is not pressed (up) */
 static inline void
-opcode_exa1(uint16_t* pc, uint8_t key)
+opcode_exa1(uint16_t* pc, const uint8_t key)
 {
   if (is_key_released(key))
     *pc += 2;
@@ -255,7 +255,7 @@ opcode_exa1(uint16_t* pc, uint8_t key)
 
 /* store delay timer in vx */
 static inline void
-opcode_fx07(uint8_t delay_timer, uint8_t* vx)
+opcode_fx07(const uint8_t delay_timer, uint8_t* vx)
 {
   *vx = delay_timer;
 }
@@ -274,28 +274,28 @@ opcode_fx0a(uint16_t* pc, uint8_t* vx)
 
 /* set delay timer to vx */
 static inline void
-opcode_fx15(uint8_t* delay_timer, uint8_t vx)
+opcode_fx15(uint8_t* delay_timer, const uint8_t vx)
 {
   *delay_timer = vx;
 }
 
 /* set sound timer to vx */
 static inline void
-opcode_fx18(uint8_t* sound_timer, uint8_t vx)
+opcode_fx18(uint8_t* sound_timer, const uint8_t vx)
 {
   *sound_timer = vx;
 }
 
 /* vx = vx + index register */
 static inline void
-opcode_fx1e(uint16_t* index, uint8_t vx)
+opcode_fx1e(uint16_t* index, const uint8_t vx)
 {
   *index += vx;
 }
 
 /* load font sprite address in index register */
 static inline void
-opcode_fx29(uint16_t* index, uint8_t vx)
+opcode_fx29(uint16_t* index, const uint8_t vx)
 {
   /* mister8 implementation loads font at address 0x0000.
    * each font sprite is 5 bytes, so each sprite is at an adress
@@ -307,7 +307,7 @@ opcode_fx29(uint16_t* index, uint8_t vx)
 
 /* store BCD representation of value in vx at I, I+1, I+2 */
 static inline void
-opcode_fx33(memory_t* mem, uint16_t index, uint8_t vx)
+opcode_fx33(memory_t* mem, const uint16_t index, const uint8_t vx)
 {
   (*mem)[index] = vx / 100;             // Hundreds : 234 / 100 = 1
   (*mem)[index + 1] = ((vx / 10) % 10); // Tens     : (234/10) = 23, 23 % 10 = 3
