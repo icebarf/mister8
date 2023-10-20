@@ -25,7 +25,7 @@ opcode_00e0(display_t* display)
 
 /* ret */
 static inline void
-opcode_00ee(uint16_t* pc, const stack_t* stack, uint8_t* stack_counter)
+opcode_00ee(uint16_t* pc, stack_t* stack, uint8_t* stack_counter)
 {
   *pc = $pop(stack, stack_counter);
 }
