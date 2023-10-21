@@ -336,7 +336,6 @@ main(int argc, char** argv)
       chip8.sound_timer -= TIMER_DECREMENT_VALUE;
     }
     if (chip8.delay_timer)
-      play_beep(beep);
       chip8.delay_timer -= TIMER_DECREMENT_VALUE;
 
     update_keys();
