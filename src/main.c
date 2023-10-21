@@ -315,6 +315,7 @@ main(int argc, char** argv)
     BeginDrawing();
     draw_display(&chip8.display, &chip8.display_modified);
     EndDrawing();
+    chip8.display_modified = false;
 
     /* timers are decremented once per frame. Target FPS is 60, so both timers
      * need to be decremented by 1 per frame.  (60 frames per second = 60 times

@@ -220,21 +220,17 @@ opcode_dxyn(memory_t* mem,
   uint8_t y = (*registers)[vy] & (DISPLAY_H - 1);
   (*registers)[0x0f] = 0;
 
-  for (int row = 0; row < n; row++) {
-    // if (row + y > DISPLAY_W)
-    //   break;
+  for (int row = 0; row < n && row + y < DISPLAY_H; row++) {
     uint8_t sprite = (*mem)[vidx + row];
-    for (int col = 0; col < 8; col++) {
-      // if (col + x > DISPLAY_W)
-      // continue;
+    for (int col = 0; col < 8 && col + x < DISPLAY_W; col++) {
       if (sprite & (0x80 >> col)) {
         if (((*disp)[(x + col) + ((y + row) * DISPLAY_W)]))
           (*registers)[0x0f] = 1;
 
         (*disp)[(x + col) + ((y + row) * DISPLAY_W)] ^= 1;
-      }
-    }
-  }
+      } // if sprite
+    }   // for int col
+  }     // for int row
   *modified = true;
 }
 
