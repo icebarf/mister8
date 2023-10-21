@@ -124,16 +124,19 @@ decode(struct system* chip8, uint16_t instruction)
 
         case 0x1:
           opcode_8xy1(&chip8->registers[nibble(3, instruction)],
+                      &chip8->registers[0xf],
                       chip8->registers[nibble(2, instruction)]);
           break;
 
         case 0x2:
           opcode_8xy2(&chip8->registers[nibble(3, instruction)],
+                      &chip8->registers[0xf],
                       chip8->registers[nibble(2, instruction)]);
           break;
 
         case 0x3:
           opcode_8xy3(&chip8->registers[nibble(3, instruction)],
+                      &chip8->registers[0xf],
                       chip8->registers[nibble(2, instruction)]);
           break;
 
@@ -288,7 +291,8 @@ main(int argc, char** argv)
 
   InitWindow(
     DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
-  SetTargetFPS(60);
+  SetTargetFPS(60); // Causes the program to run at a target of (1 / 60) sec,
+                    // the target time for 1 frame to be produced.
 
   struct system chip8 = {
     .display = { 0 },

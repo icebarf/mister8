@@ -10,10 +10,8 @@ enum
   KEY_RELEASED = 0
 };
 
-/* these variables must be written-to by update_keys, and
- * read-from by get_key.
- * 1 means down (pressed), 0 means up (released)
- */
+/* these variables must be written-to by update_keys,
+ * and read-from by  get_key.*/
 static uint8_t keys[KEY_COUNT] = { 0 };
 static uint8_t keys_last[KEY_COUNT] = { 0 };
 

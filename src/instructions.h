@@ -96,23 +96,26 @@ opcode_8xy0(uint8_t* vx, const uint8_t vy)
 
 /* set vx to vx OR vy */
 static inline void
-opcode_8xy1(uint8_t* vx, const uint8_t vy)
+opcode_8xy1(uint8_t* vx, uint8_t* vf, const uint8_t vy)
 {
   *vx = *vx | vy;
+  *vf = 0;
 }
 
 /* set vx to vx AND vy */
 static inline void
-opcode_8xy2(uint8_t* vx, const uint8_t vy)
+opcode_8xy2(uint8_t* vx, uint8_t* vf, const uint8_t vy)
 {
   *vx = *vx & vy;
+  *vf = 0;
 }
 
 /* set vx to vx XOR vy */
 static inline void
-opcode_8xy3(uint8_t* vx, const uint8_t vy)
+opcode_8xy3(uint8_t* vx, uint8_t* vf, const uint8_t vy)
 {
   *vx = *vx ^ vy;
+  *vf = 0;
 }
 
 /* add vx to vy, set vf if carry occurs */
@@ -213,26 +216,24 @@ opcode_dxyn(memory_t* mem,
             const uint8_t n,
             bool* modified)
 {
-  uint8_t x = (*registers)[vx] & 63;
-  uint8_t y = (*registers)[vy] & 31;
+  uint8_t x = (*registers)[vx] & (DISPLAY_W - 1);
+  uint8_t y = (*registers)[vy] & (DISPLAY_H - 1);
   (*registers)[0x0f] = 0;
 
   for (int row = 0; row < n; row++) {
+    // if (row + y > DISPLAY_W)
+    //   break;
     uint8_t sprite = (*mem)[vidx + row];
     for (int col = 0; col < 8; col++) {
+      // if (col + x > DISPLAY_W)
+      // continue;
       if (sprite & (0x80 >> col)) {
         if (((*disp)[(x + col) + ((y + row) * DISPLAY_W)]))
           (*registers)[0x0f] = 1;
 
         (*disp)[(x + col) + ((y + row) * DISPLAY_W)] ^= 1;
       }
-
-      if (col + y > DISPLAY_H)
-        break;
     }
-
-    if (row + x > DISPLAY_W)
-      break;
   }
   *modified = true;
 }
