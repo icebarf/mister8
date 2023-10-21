@@ -281,6 +281,15 @@ decode(struct system* chip8, uint16_t instruction)
   }
 }
 
+void
+load_rom(const char* filename, struct system* chip8)
+{
+  int read_bytes = read_file(filename, &chip8->memory);
+  if (read_bytes <= 0)
+    exit(1);
+  fprintf(stdout, "File: %s\nBytes Read: %i\n", filename, read_bytes);
+}
+
 int
 main(int argc, char** argv)
 {
@@ -293,6 +302,8 @@ main(int argc, char** argv)
     DISPLAY_W * DRAWING_SCALE, DISPLAY_H * DRAWING_SCALE, "mister8 - alpha");
   SetTargetFPS(60); // Causes the program to run at a target of (1 / 60) sec,
                     // the target time for 1 frame to be produced.
+  InitAudioDevice();
+  SetMasterVolume(1.0f);
 
   struct system chip8 = {
     .display = { 0 },
@@ -306,10 +317,7 @@ main(int argc, char** argv)
     .stack_counter = 0,
   };
 
-  int read_bytes = read_file(argv[1], &chip8.memory);
-  if (read_bytes <= 0)
-    return 1;
-  fprintf(stdout, "File: %s\nBytes Read: %i\n", argv[1], read_bytes);
+  load_rom(argv[1], &chip8);
 
   while (!WindowShouldClose()) {
     BeginDrawing();
