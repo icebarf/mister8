@@ -13,7 +13,6 @@ enum Constants
   STACK_COUNTER_MAX = 47,
   REGISTER_COUNT = 16,
   BYTES_RESERVED_LOW = 512,
-  BYTES_RESERVED_HIGH = 352,
   PROG_LOAD_ADDRESS = 0x200,
   DRAWING_SCALE = 8,
   INSTRUCTIONS_PER_FRAME = 16, // ipf - instructions to execute per frame.

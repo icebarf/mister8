@@ -11,8 +11,7 @@
 static inline bool
 memory_available_for(unsigned long fsize)
 {
-  unsigned long available_space =
-    MEMORY_CAP - BYTES_RESERVED_LOW - BYTES_RESERVED_HIGH;
+  unsigned long available_space = MEMORY_CAP - BYTES_RESERVED_LOW;
   return (fsize <= available_space) ? true : false;
 }
 
