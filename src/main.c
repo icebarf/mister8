@@ -331,12 +331,13 @@ main(int argc, char** argv)
      * need to be decremented by 1 per frame.  (60 frames per second = 60 times
      * decrementing of timers). Timers need to be decremented at a rate of 60Hz
      * so you need to adjust the decrementation value accordingly as well. */
-    if (chip8.sound_timer)
+    if (chip8.sound_timer) {
+      play_beep(beep);
       chip8.sound_timer -= TIMER_DECREMENT_VALUE;
-    if (chip8.delay_timer) {
+    }
+    if (chip8.delay_timer)
       play_beep(beep);
       chip8.delay_timer -= TIMER_DECREMENT_VALUE;
-    }
 
     update_keys();
 
