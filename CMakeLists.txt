@@ -8,6 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(mister8)
 target_sources(mister8 
+                       PRIVATE src/audio.h
+                       PRIVATE src/audio.c
                        PRIVATE src/chip8.h
                        PRIVATE src/instructions.h
                        PRIVATE src/input.c

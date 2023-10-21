@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "audio.h"
 #include "chip8.h"
 #include "instructions.h"
 #include "util.h"
@@ -304,6 +305,7 @@ main(int argc, char** argv)
                     // the target time for 1 frame to be produced.
   InitAudioDevice();
   SetMasterVolume(1.0f);
+  Sound beep = load_beep();
 
   struct system chip8 = {
     .display = { 0 },
@@ -331,8 +333,10 @@ main(int argc, char** argv)
      * so you need to adjust the decrementation value accordingly as well. */
     if (chip8.sound_timer)
       chip8.sound_timer -= TIMER_DECREMENT_VALUE;
-    if (chip8.delay_timer)
+    if (chip8.delay_timer) {
+      play_beep(beep);
       chip8.delay_timer -= TIMER_DECREMENT_VALUE;
+    }
 
     update_keys();
 
@@ -348,5 +352,6 @@ main(int argc, char** argv)
     }
   }
 
+  unload_beep(beep);
   CloseWindow();
 }
