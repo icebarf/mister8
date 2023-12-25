@@ -7,6 +7,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 add_executable(mister8)
+
+target_include_directories(mister8 PUBLIC lib/raygui)
+
 target_sources(mister8 
                        PRIVATE src/audio.h
                        PRIVATE src/audio.c
@@ -15,11 +18,12 @@ target_sources(mister8
                        PRIVATE src/input.c
                        PRIVATE src/input.h
                        PRIVATE src/main.c
+                       PRIVATE src/raygui_impl.c
                        PRIVATE src/util.c
                        PRIVATE src/util.h
               )
 target_compile_options(mister8 PUBLIC -Wall -Wextra -Wpedantic -Wno-dollar-in-identifier-extension
-                                      -Wshadow -Wconversion -O0 -g3
+                                      -Wshadow -Wconversion -O3
                                       )
 target_link_options(mister8 PUBLIC -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
                    )
